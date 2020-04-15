@@ -1,0 +1,43 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 11题盛最多水的容器
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>11题盛最多水的容器</title>
+  </head>
+  <body>
+    <script>
+      let oldArr = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+      function maxArea(height) {
+        let total = height.length
+        let max = 0
+        // 双循环 每个木板都跟其他木板匹配一次
+        for (let i = 0; i < total; i++) {
+          for (let j = 1; j < total; j++) {
+            // 两个木板的高度
+            let num1 = height[i]
+            let num2 = height[j]
+            // 获取最小高度
+            let heightNum = num1 > num2 ? num2 : num1 // 取木板最小的那个值
+            let lengthNum = j - i // 底部的长度
+            let size = heightNum * lengthNum
+            if (size > max) {
+              max = size // 最大面积
+            }
+          }
+        }
+        return max
+      }
+      console.log('输出', maxArea(oldArr))
+    </script>
+  </body>
+</html>
