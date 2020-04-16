@@ -1,0 +1,46 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 867题 转置矩阵
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>867题 转置矩阵</title>
+  </head>
+  <body>
+    <script>
+      // let oldArr = [
+      //   [1, 2, 3],
+      //   [4, 5, 6],
+      //   [7, 8, 9],
+      // ]
+      let oldArr = [
+        [1, 2, 3],
+        [4, 5, 6],
+      ]
+      // 将一个长方形横放改为竖放 每列为一个数组 是大数组的一个元素
+      var transpose = function (A) {
+        let result = []
+        // 横向遍历
+        for (let i = 0; i < A[0].length; i++) {
+          let row = []
+          // 纵向遍历
+          for (let j = 0; j < A.length; j++) {
+            // 添加每列的第一个元素
+            row.push(A[j][i])
+          }
+          result.push(row)
+        }
+        return result
+      }
+      console.log('输出', transpose(oldArr))
+    </script>
+  </body>
+</html>
