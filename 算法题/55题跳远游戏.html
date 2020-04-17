@@ -1,0 +1,39 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 55题跳远游戏
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>55题跳远游戏</title>
+  </head>
+  <body>
+    <script>
+      let oldArr = [2, 3, 1, 1, 4] // true
+      // let oldArr = [3, 2, 1, 0, 4] // false
+      // 贪心
+      var canJump = function (nums) {
+        let canJumpMax = 0 // 下一步的最远距离
+        let last_canJumpMax = 0 // 上一步的最远距离
+        let len = nums.length
+        for (let i = 0; i < len; i++) {
+          canJumpMax = Math.max(canJumpMax, i + nums[i]) // 下一步的最远距离
+          if (last_canJumpMax === i) {
+            last_canJumpMax = canJumpMax // 当前的最远距离
+          } else if (last_canJumpMax < i) {
+            return false  // 最远距离无法到达终点即false
+          }
+        }
+        return true
+      }
+      console.log('输出', canJump(oldArr))
+    </script>
+  </body>
+</html>
