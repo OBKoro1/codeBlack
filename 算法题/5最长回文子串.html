@@ -1,0 +1,51 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/5. 最长回文子串.html
+ * Description  : 5. 最长回文子串
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5最长回文子串</title>
+  </head>
+  <body>
+    <script>
+      let str = 'babad'
+      let str2 =
+        'civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth'
+      /**
+       * @param {string} s
+       * @return {string}
+       */
+      var longestPalindrome = function (s) {
+        let maxStr = ''
+        let len = s.length
+        // 双循环 每个字符都比较一次
+        for (let i = 0; i < len; i++) {
+          for (let j = len; j > i; j--) {
+            if (j - i <= maxStr.length) {
+              continue
+            }
+            let newStr = s.slice(i, j) // 当前循环
+            let strArr = newStr.split('') // 切割成数组
+            let reverseStr = strArr.reverse().join('') // 颠倒字符串
+            // 相等并且超过的话
+            if (newStr === reverseStr && newStr.length > maxStr.length) {
+              maxStr = newStr
+            }
+          }
+        }
+        return maxStr
+      }
+
+      console.log('输出', longestPalindrome(str))
+      console.log('输出', longestPalindrome(str2))
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 466统计重复个数
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>466统计重复个数</title>
+  </head>
+  <body>
+    <script>
+      // S1=s1*n
+      // S2=s2*n
+      // 题目解读 S1中包含了多少个S2的子序列。
+      /**
+       * @param {string} s1
+       * @param {number} n1
+       * @param {string} s2
+       * @param {number} n2
+       * @return {number}
+       */
+      var getMaxRepetitions = function (s1, n1, s2, n2) {
+        // 字符串转成数组
+        var arr1 = s1.split('')
+        var arr2 = s2.split('')
+        var k = 0 // s2指针
+        const S1Len = arr1.length * n1 // S1的长度
+        for (var j = 0; j < S1Len; j++) {
+          // 取余获得index
+          const s1Index = j % arr1.length
+          const s2Index = k % arr2.length
+          if (arr1[s1Index] === arr2[s2Index]) k++ // 匹配到字符 指针增加
+        }
+        const S2Len = arr2.length * n2 // S2的长度
+        return (k / S2Len) | 0
+      }
+
+      var getMaxRepetitions = function (s1, n1, s2, n2) {
+        let counts1 = 0 //s1计数
+        let counts2 = 0 //s2计数
+        let s2p = 0 //s2指针
+        //当s1的循环数量没有超过s1总个数，就可以继续读取s1
+        while (counts1 < n1) {
+          //遍历s1中每一个字符
+          for (let i = 0; i < s1.length; i++) {
+            // 如果相等指针后移 匹配后面的字符
+            if (s1[i] === s2[s2p]) s2p++
+            // s2最后一个，全都匹配到了 重置指针，s2计数加一
+            if (s2p === s2.length) {
+              counts2++
+              s2p = 0
+            }
+          }
+          counts1++ // 循环下一个s1
+          //如果s2的指针指到了开头，说明正好找到了循环点
+          if (s2p === 0) {
+            let times = Math.floor(n1 / counts1) // 还有多少次循环点
+            counts1 *= times // 循环点 * 子序列次数
+            counts2 *= times
+            //这里计数乘循环的次数，继续逊汗 因为counts1还可能是小于n1的，循环节点不能整除
+          }
+        }
+        //返回结果。
+        return Math.floor(counts2 / n2)
+      }
+
+      console.log('输出', getMaxRepetitions('acb', 4, 'ab', 2))
+    </script>
+  </body>
+</html>

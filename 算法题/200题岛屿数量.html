@@ -33,6 +33,7 @@
         ['0', '1', '0'],
         ['1', '1', '1'],
       ]
+      // 深度优先
       var numIslands = function (grid) {
         let num = 0
         if (grid && grid.length) {
@@ -61,52 +62,6 @@
         }
         return num
       }
-
-      // var numIslands = function (grid) {
-      //   if (grid.length === 0) return 0
-      //   let heigh = grid.length
-      //   let len = grid[0].length
-      //   let islandNum = 0 // 岛屿数量
-      //   // 计算是否为岛屿
-      //   let getIsland = (item) => {
-      //     // 是水的话不计算，曾经计算过的也不计算 未来还没计算的也不计算
-      //     if (item === '0') {
-      //       return 0
-      //     } else if (item === '计算过的岛屿') {
-      //       return 1
-      //     } else {
-      //       return 1
-      //     }
-      //   }
-      //   for (let i = 0; i < heigh; i++) {
-      //     for (let j = 0; j < len; j++) {
-      //       let island = 0 // 不为岛屿数字会增加
-      //       if (grid[i][j] === '0') continue // 水不操作
-      //       if (i !== 0) {
-      //         // 上方
-      //         island = island + getIsland(grid[i - 1][j])
-      //       }
-      //       if (j + 1 !== len) {
-      //         // 右边
-      //         island = island + getIsland(grid[i][j + 1])
-      //       }
-      //       if (i + 1 !== heigh) {
-      //         // 下
-      //         island = island + getIsland(grid[i + 1][j])
-      //       }
-      //       if (j !== 0) {
-      //         island = island + getIsland(grid[i][j - 1])
-      //       }
-      //       grid[i][j] = '计算过的岛屿' // 所有1都计算过
-      //       if (island === 0) {
-      //         // 四面环水
-      //         debugger
-      //         islandNum++
-      //       }
-      //     }
-      //   }
-      //   return islandNum
-      // }
       console.log('输出', numIslands(oldArr3))
       console.log('输出', numIslands(oldArr2))
       console.log('输出', numIslands(oldArr))
