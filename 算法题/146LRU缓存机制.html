@@ -1,0 +1,192 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-06-01 16:16:22
+ * FilePath     : \codeBlack\算法题\146LRU缓存机制.html
+ * Description  : 146. LRU缓存机制
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>146. LRU缓存机制</title>
+  </head>
+  <body>
+    <script>
+      // TODO: 链表
+      // 生成链表
+      class ListNode {
+        constructor(key, value) {
+          this.key = key
+          this.value = value
+          this.next = null
+          this.prev = null
+        }
+      }
+      class LRUCache {
+        constructor(max) {
+          this.max = max // 最大数量
+          this.hashTable = {} // 哈希表存储数据
+          this.count = 0 // 缓存数目
+          // 双向链表
+          this.dummyHead = new ListNode() // 虚拟头结点
+          this.dummyTail = new ListNode() // 虚拟尾节点
+          this.dummyHead.next = this.dummyTail
+          this.dummyTail.prev = this.dummyHead // 相联系
+        }
+        get(key) {
+          const node = this.hashTable[key]
+          if (node) {
+            this.moveToHead(node)
+            return node.value
+          }
+          return -1
+        }
+        // 移动到顶部
+        moveToHead(node) {
+          this.removeFromList(node)
+          this.addToHead(node)
+        }
+        // 删除节点
+        removeFromList(node) {
+          // 改变前后节点的链接值
+          const prev = node.prev
+          const next = node.next
+          prev.next = next
+          next.prev = prev
+        }
+        // 添加到顶部
+        addToHead(node) {
+          node.prev = this.dummyHead
+          node.next = this.dummyHead.next // 当前节点的next指向第一个节点
+          // 原来的第一个真实节点的prev指向node 第一个就变成第二个
+          this.dummyHead.next.prev = node
+          this.dummyHead.next = node // 替换第一个节点
+        }
+        put(key, value) {
+          const node = this.hashTable[key]
+          if (node) {
+            // 已存在 更新值和链表值
+            node.value = value
+            this.moveToHead(node)
+          } else {
+            const newNode = new ListNode(key, value) // 创建新节点
+            this.hashTable[key] = newNode // 存入哈希表
+            this.addToHead(newNode) // 添加到头部
+            this.count++ // 缓存数目+1
+            if (this.count > this.max) {
+              this.removeItem()
+            }
+          }
+        }
+        // 删除数据
+        removeItem() {
+          const oldNode = this.removeLast()
+          delete this.hashTable[oldNode.key]
+          this.count--
+        }
+        // 删除最后一个节点
+        removeLast() {
+          const node = this.dummyTail.prev // 虚拟尾节点找到最后一个节点
+          this.removeFromList(node)
+          return node
+        }
+      }
+
+      // TODO: map: 用时88.91, 内存100
+      /**
+       * @param {number} capacity
+       */
+      // var LRUCache = function (capacity) {
+      //   this.map = new Map() // map默认记住插入的顺序
+      //   this.max = capacity // 最大数量
+      // }
+
+      // /**
+      //  * @param {number} key
+      //  * @return {number}
+      //  */
+      // LRUCache.prototype.get = function (key) {
+      //   const value = this.map.get(key) || -1
+      //   if (value !== -1) {
+      //     this.map.delete(key) // 删除更新插入顺序
+      //     this.map.set(key, value)
+      //   }
+      //   return value
+      // }
+      // /**
+      //  * @param {number} key
+      //  * @param {number} value
+      //  * @return {void}
+      //  */
+      // LRUCache.prototype.put = function (key, value) {
+      //   if (this.map.has(key)) {
+      //     this.map.delete(key) // 删除更新插入顺序
+      //   }
+      //   this.map.set(key, value)
+      //   if (this.max < this.map.size) {
+      //     const mapKeys = this.map.keys() // 获取遍历值
+      //     const oldKey = mapKeys.next().value // map插入顺序 默认第一个即最早插入的值
+      //     this.map.delete(oldKey) // 删除最早的值
+      //   }
+      // }
+
+      // TODO: 数组: 用时36,内存100
+      // /**
+      //  * @param {number} capacity
+      //  */
+      // var LRUCache = function (capacity) {
+      //   this.keyArr = [] // key最近使用的值
+      //   this.data = {} // 存储数据
+      //   this.max = capacity // 最大数量
+      // }
+
+      // /**
+      //  * @param {number} key
+      //  * @return {number}
+      //  */
+      // LRUCache.prototype.get = function (key) {
+      //   const index = this.findIndex(key)
+      //   if (index !== -1) {
+      //     this.updateNew(key, index)
+      //     return this.data[key]
+      //   }
+      //   return -1
+      // }
+      // // 更新key的新鲜值
+      // LRUCache.prototype.updateNew = function (key, index) {
+      //   this.keyArr.splice(index, 1)
+      //   this.keyArr.unshift(key) // 更新key的新鲜值
+      // }
+
+      // // 寻找key的位置
+      // LRUCache.prototype.findIndex = function (key) {
+      //   return this.keyArr.findIndex((item) => {
+      //     return item === key
+      //   })
+      // }
+
+      // /**
+      //  * @param {number} key
+      //  * @param {number} value
+      //  * @return {void}
+      //  */
+      // LRUCache.prototype.put = function (key, value) {
+      //   const index = this.findIndex(key)
+      //   if (index !== -1) {
+      //     this.updateNew(key, index)
+      //     this.data[key] = value
+      //   } else {
+      //     this.data[key] = value
+      //     this.keyArr.unshift(key)
+      //   }
+      //   if (this.max < this.keyArr.length) {
+      //     this.keyArr.pop() // 删除最后一个值
+      //   }
+      // }
+    </script>
+  </body>
+</html>
