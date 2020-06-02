@@ -1,0 +1,122 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-06-02 11:52:29
+ * FilePath     : \codeBlack\算法题\33搜索旋转排序数组.html
+ * Description  : 33. 搜索旋转排序数组
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>33. 搜索旋转排序数组</title>
+  </head>
+  <body>
+    <script>
+      let oldArr = [4, 5, 6, 7, 0, 1, 2]
+      /**
+       * @description
+       * TODO: 利用二分查找方式
+       * 1.利用将数组从中间分开
+       * 此时肯定存在前半部分或是后半部分是有序的（重要）
+       * 2.对有序部分执行二分查找
+       * 3.如果目标值不可能存在于有序部分
+       * 4.则将目标查找数组选择在无序部分
+       * 5.继续进行1进行判断
+       * @param {number[]} nums
+       * @param {number} target
+       * @return {number}
+       */
+      var search = function (nums, target) {
+        if (!nums || nums.length === 0) return -1
+        let start = 0
+        let end = nums.length - 1
+        let mid
+        while (start <= end) {
+          mid = Math.ceil((start + end) / 2)
+          // 首尾中全部验证
+          if (nums[mid] === target) return mid
+          if (nums[start] === target) return start
+          if (nums[end] === target) return end
+          // 说明前半部分有序
+          if (nums[start] < nums[mid]) {
+            // 说明目标值存在于有序部分，将末尾设置为mid
+            // 判断目标值是否在前半部分
+            // 更新索引 继续执行二分查找
+            if (nums[start] < target && target < nums[mid]) {
+              end = mid - 1
+            } else {
+              // 说明目标值存在于后半段
+              start = mid + 1
+            }
+          } else {
+            // 说明后半部分有序
+            // 判断目标值是否在后半部分
+            // 更新索引 继续执行二分查找
+            if (nums[mid] < target && target < nums[end]) {
+              start = mid + 1
+            } else {
+              end = mid - 1
+            }
+          }
+        }
+        return -1
+      }
+      // TODO: 根据上升和下降的规律
+      /**
+       * @param {number[]} nums
+       * @param {number} target
+       * @return {number}
+       */
+      // var search = function (nums, target) {
+      //   const searchNum = (i, direction = 'left') => {
+      //     // 找到目标值
+      //     if (nums[i] === target) {
+      //       return i
+      //     }
+      //     if (direction === 'left') {
+      //       // 上升值错过该目标
+      //       if (nums[i] > target) {
+      //         return -1
+      //       } else if (nums[i] < nums[0]) {
+      //         // 上升值 小于最小值
+      //         return -1
+      //       }
+      //     } else {
+      //       // 下降 小于该目标值
+      //       if (nums[i] < target) {
+      //         return -1
+      //       } else if (nums[i] > nums[nums.length - 1]) {
+      //         // 下降值 大于最大值
+      //         return -1
+      //       }
+      //     }
+      //     return '查找ing'
+      //   }
+      //   // 循环方向
+      //   if (target >= nums[0]) {
+      //     // 如果目标值大于第一个值即为从左往右 上升查找
+      //     for (let i = 0; i < nums.length; i++) {
+      //       const res = searchNum(i)
+      //       if (res !== '查找ing') {
+      //         return res
+      //       }
+      //     }
+      //   } else {
+      //     for (let i = nums.length - 1; i > 0; i--) {
+      //       const res = searchNum(i, 'right')
+      //       if (res !== '查找ing') {
+      //         return res
+      //       }
+      //     }
+      //   }
+      //   return -1 // 没找到
+      // }
+      // console.log('输出', search(oldArr, 0))
+      console.log('输出', search([1], 0))
+    </script>
+  </body>
+</html>
