@@ -2,8 +2,8 @@
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
  * LastEditors  : OBKoro1
- * LastEditTime : 2020-04-15 17:24:26
- * FilePath     : /codeBlack/template.html
+ * LastEditTime : 2020-06-03 10:53:09
+ * FilePath     : \codeBlack\算法题\56合并区间.html
  * Description  : 56合并区间
  * https://github.com/OBKoro1
  -->
@@ -22,6 +22,7 @@
         [8, 10],
         [15, 18],
       ]
+      // 解析: https://leetcode-cn.com/problems/merge-intervals/solution/he-bing-qu-jian-chao-rong-yi-li-jie-93100-by-caife/
       /**
        * @param {number[][]} intervals
        * @return {number[][]}
@@ -29,18 +30,20 @@
       var merge = function (intervals) {
         if (intervals.length == 0) return []
         var res = []
-        // 排序每个数组元素的第一个元素
+        // 排序二维数组 递增的数组
         intervals.sort(function (a, b) {
           return a[0] - b[0]
         })
         // 初始化区间 从二维数组的第二个元素开始比较
         res.push(intervals[0])
         for (var i = 1; i < intervals.length; i++) {
-          // 当前数组元素的第一个元素 比当前区间的比较大的元素大的话 即为新区间
-          if (intervals[i][0] > res[res.length - 1][1]) res.push(intervals[i])
-          else if (intervals[i][1] > res[res.length - 1][1])
-            // 当前数组元素的最大值 大于区间中的最大值即为重合
-            res[res.length - 1][1] = intervals[i][1] // 更新区间的最大值
+          // 当前元素的左边界> 已添加元素的右边界 即为新的区间
+          if (intervals[i][0] > res[res.length - 1][1]) {
+            res.push(intervals[i])
+          } else if (intervals[i][1] > res[res.length - 1][1]) {
+            // 当前元素的右边界 大于已添加元素的右边界 它们重合 合并元素
+            res[res.length - 1][1] = intervals[i][1] // 当前元素的最大值赋值给已添加元素的最大值
+          }
         }
         return res
       }
