@@ -2,7 +2,7 @@
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
  * LastEditors: OBKoro1
- * LastEditTime: 2020-05-22 15:21:28
+ * LastEditTime: 2020-06-07 14:35:38
  * FilePath: /codeBlack/算法题/15三数之和.html
  * Description  : 15三数之和
  * https://github.com/OBKoro1
@@ -31,15 +31,15 @@
       nums.sort((a, b) => a - b); // 排序
       for (let i = 0; i < len; i++) {
         if (nums[i] > 0) break; // 如果当前数字大于0，则三数之和一定大于0，所以结束循环
-        if (i > 0 && nums[i] === nums[i - 1]) continue; // 当前值重复 跟左右指针相加后导致结果重复 跳过一个
-        let L = i + 1; // 左指针
+        if (i > 0 && nums[i] === nums[i - 1]) continue; // 当前值跟上一个值重复 上面左右指针已经相加过 会导致结果重复 跳过后面的
+        let L = i + 1; // 左指针比当前值大
         let R = len - 1; // 右指针
         while (L < R) { // 当前值 穷尽可能为0
           const sum = nums[i] + nums[L] + nums[R];
           if (sum == 0) {
             ans.push([nums[i], nums[L], nums[R]]);
-            while (L < R && nums[L] === nums[L + 1]) L++; // 指针值相同 去重
-            while (L < R && nums[R] === nums[R - 1]) R--; // 指针值相同 去重
+            while (L < R && nums[L] === nums[L + 1]) L++; // 指针值相同 跳过 否则会添加重复值 
+            while (L < R && nums[R] === nums[R - 1]) R--; // 指针值相同 跳过  否则会添加重复值
             L++;
             R--;
           }
