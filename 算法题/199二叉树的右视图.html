@@ -1,9 +1,9 @@
 <!--
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
- * LastEditors  : OBKoro1
- * LastEditTime : 2020-06-03 15:44:40
- * FilePath     : \codeBlack\算法题\199二叉树的右视图.html
+ * LastEditors: OBKoro1
+ * LastEditTime: 2020-06-08 23:27:23
+ * FilePath: /codeBlack/算法题/199二叉树的右视图.html
  * Description  : 199二叉树的右视图
  * https://github.com/OBKoro1
  -->
@@ -32,8 +32,8 @@
       var rightSideView = function (root) {
         if (!root) return []
         let res = [] // 结果
-        let setp = 0 // 树的深度 从0开始
-        dfs(root, setp, res)
+        let start = 0 // 树的深度 从0开始
+        dfs(root, start, res)
         return res
       }
       function dfs(root, step, res) {
