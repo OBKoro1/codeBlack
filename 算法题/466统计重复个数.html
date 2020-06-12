@@ -2,8 +2,8 @@
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
  * LastEditors  : OBKoro1
- * LastEditTime : 2020-04-15 17:24:26
- * FilePath     : /codeBlack/template.html
+ * LastEditTime : 2020-06-10 12:26:54
+ * FilePath     : \codeBlack\算法题\466统计重复个数.html
  * Description  : 466统计重复个数
  * https://github.com/OBKoro1
  -->
@@ -36,7 +36,7 @@
           // 取余获得index
           const s1Index = j % arr1.length
           const s2Index = k % arr2.length
-          if (arr1[s1Index] === arr2[s2Index]) k++ // 匹配到字符 指针增加
+          if (arr1[s1Index] === arr2[s2Index]) k++ // s1和s2的字符相等 s2指针增加往后查找
         }
         const S2Len = arr2.length * n2 // S2的长度
         return (k / S2Len) | 0
@@ -61,10 +61,10 @@
           counts1++ // 循环下一个s1
           //如果s2的指针指到了开头，说明正好找到了循环点
           if (s2p === 0) {
-            let times = Math.floor(n1 / counts1) // 还有多少次循环点
+            let times = Math.floor(n1 / counts1) // 之前循环了多少次 还有多少次循环点
             counts1 *= times // 循环点 * 子序列次数
             counts2 *= times
-            //这里计数乘循环的次数，继续逊汗 因为counts1还可能是小于n1的，循环节点不能整除
+            //这里计数乘循环的次数，继续循环 因为counts1还可能是小于n1的，循环节点不能整除
           }
         }
         //返回结果。
