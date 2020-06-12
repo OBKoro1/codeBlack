@@ -1,9 +1,9 @@
 <!--
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
- * LastEditors  : OBKoro1
- * LastEditTime : 2020-04-15 17:24:26
- * FilePath     : /codeBlack/template.html
+ * LastEditors: OBKoro1
+ * LastEditTime: 2020-06-09 23:22:41
+ * FilePath: /codeBlack/算法题/456题132模式.html
  * Description  : 456题132模式
  * https://github.com/OBKoro1
  -->
@@ -24,18 +24,19 @@
         if (nums.length <= 2) return false
         const min = [nums[0]]
         const stack = []
+        // 数组前i项最小的数字存在一个数组min内
         for (let i = 1; i < nums.length; i++) {
           min[i] = Math.min(min[i - 1], nums[i])
         }
-        console.log('min', min)
+        // 倒序
         for (let i = nums.length - 1; i > 0; i--) {
-          // 栈内排除当前最小值 获取第一个值
+          // 当前项不是最小值
           if (nums[i] > min[i]) {
-            // 栈内数据比最小值大
+            // 栈内数据小于当前值的最小值 从min的大值开始
             while (stack.length !== 0 && stack[stack.length - 1] <= min[i]) {
               stack.pop()
             }
-            // 栈内数据比当前值小 即满足 l1<l2<l3的需求
+            // 栈内(之前遍历的)数据比当前值小 即满足 l1<l3<l2的需求
             if (stack.length !== 0 && stack[stack.length - 1] < nums[i]) {
               return true
             }
@@ -50,10 +51,10 @@
       //   let min = nums[0]
       //   for (let i = 1; i < nums.length - 1; i++) {
       //     for (let j = i + 1; j < nums.length; j++) {
-      //       // 当前循环值 比最小值大， 又比主循环值小 即满足
+      //       // 比主循环大一个索引 当前循环值 比最小值大， 又比主循环值小 即满足
       //       if (nums[j] > min && nums[j] < nums[i]) return true
       //     }
-      //     min = Math.min(min, nums[i]) // 更新最小值
+      //     min = Math.min(min, nums[i]) // 遍历过的值的最小值
       //   }
       //   return false
       // }

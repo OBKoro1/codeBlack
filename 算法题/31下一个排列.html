@@ -1,0 +1,67 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors: OBKoro1
+ * LastEditTime: 2020-06-11 23:48:50
+ * FilePath: /codeBlack/算法题/31下一个排列.html
+ * Description  : 31. 下一个排列
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>31. 下一个排列</title>
+</head>
+
+<body>
+  <script>
+    // 1, 2, 3 → 1, 3, 2
+    // 3, 2, 1 → 1, 2, 3
+    // 1, 1, 5 → 1, 5, 1
+    /**
+     * @param {number[]} nums
+     * @return {void} Do not return anything, modify nums in-place instead.
+     */
+    // 题解：找下一个值，比如对于1,2,3来说，可以组成这样的字典序列表[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]，
+    // 就是想让我们找到这其中元素的下一个列表元素，比如[1,2,3]推【1,3,2】,如果到了最后一个元素，则推第一个元素。
+    
+    // 思路: 其实就是从数组倒着查找，找到nums[i] 比nums[i+1]小的时候，就将nums[i]跟nums[i+1]到nums[nums.length - 1]当中找到一个最小的比nums[i]大的元素交换。交换后，再把nums[i+1]到nums[nums.length-1]排序，就ok了
+
+    // 字典序的规律(还不太懂)：字典序下一个值的规律是核心 https://baike.baidu.com/item/%E5%AD%97%E5%85%B8%E5%BA%8F
+    let oldArr = [1, 3, 4, 5, 2]
+    var nextPermutation = function (nums) {
+      if (nums.length <= 2) return nums.reverse();
+      let i = nums.length - 2
+      // 找到第一个右侧数 大于 左侧数的 下标 i (这样就代表当前组成的数字不是最大的)
+      while (i >= 0 && nums[i + 1] <= nums[i]) {
+        i--;
+      }
+      // 如果i < 0 右侧数一直比左侧数小 即降序，所以只需要转化为升序即可
+      if (i >= 0) {
+        let j = nums.length - 1
+        // 如果i大于0，则从右到左开始找 第一个大于 i下标数字的 下标 j
+        while (j > 0 && nums[j] <= nums[i]) {
+          j--
+        }
+        // 互换位置
+        [nums[i], nums[j]] = [nums[j], nums[i]]
+      }
+      const reverseArr = (start, end) => {
+        while (start < end) {
+          [nums[start], nums[end]] = [nums[end], nums[start]]
+          start++
+          end--
+        }
+      }
+      // 将i下标往后的 数组 进行反序，变成升序；因为i往后的子数组一定是降序的
+      reverseArr(i + 1, nums.length - 1)
+      return nums
+    };
+    console.log('输出', nextPermutation(oldArr))
+  </script>
+</body>
+
+</html>
