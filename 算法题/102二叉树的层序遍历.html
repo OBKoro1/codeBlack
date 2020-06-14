@@ -1,0 +1,78 @@
+102. 二叉树的层序遍历<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/102二叉树的层序遍历.html
+ * Description  : 102二叉树的层序遍历
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>102二叉树的层序遍历</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * Definition for a binary tree node.
+       * function TreeNode(val) {
+       *     this.val = val;
+       *     this.left = this.right = null;
+       * }
+       */
+      /**
+       * @param {TreeNode} root
+       * @return {number[][]}
+       */
+      // 深度优先
+      var levelOrder = function (root) {
+        const res = []
+        const levelNum = 0 // 当前层级
+        dfs(root, levelNum)
+        function dfs(node, step) {
+          if (node) {
+            // 当前节点是否有值
+            if (res[step]) {
+              // 该层级已添加过节点 在当前层级中继续添加
+              res[step].push(node.val)
+            } else {
+              // 当前层级未添加过节点 创建一个数组 添加节点
+              res.push([node.val])
+            }
+            // 循环下个节点 增加层级
+            dfs(node.left, step + 1)
+            dfs(node.right, step + 1)
+          }
+        }
+        return res
+      }
+
+      // 广度优先
+      var levelOrder = function (root) {
+        const ret = []
+        if (!root) return ret
+        const q = [] // 栈
+        q.push(root)
+        while (q.length !== 0) {
+          const currentLevelSize = q.length
+          ret.push([]) // 层级初始化
+          // 遍历广度 同一层级 一次循环
+          for (let i = 1; i <= currentLevelSize; ++i) {
+            const node = q.shift() // 广度节点
+            ret[ret.length - 1].push(node.val) // 添加广度同一节点
+            // 下个层级
+            if (node.left) q.push(node.left) 
+            if (node.right) q.push(node.right)
+          }
+        }
+
+        return ret
+      }
+
+      console.log('输出', levelOrder())
+    </script>
+  </body>
+</html>
