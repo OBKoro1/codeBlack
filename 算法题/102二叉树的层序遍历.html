@@ -27,7 +27,7 @@
        * @param {TreeNode} root
        * @return {number[][]}
        */
-      // 深度优先
+      // dfs深度优先
       var levelOrder = function (root) {
         const res = []
         const levelNum = 0 // 当前层级
@@ -50,18 +50,18 @@
         return res
       }
 
-      // 广度优先
+      // bfs广度优先 题解: https://leetcode-cn.com/problems/binary-tree-level-order-traversal/solution/bfs-de-shi-yong-chang-jing-zong-jie-ceng-xu-bian-l/
       var levelOrder = function (root) {
         const ret = []
         if (!root) return ret
         const q = [] // 栈
         q.push(root)
         while (q.length !== 0) {
-          const currentLevelSize = q.length
+          const currentLevelSize = q.length // 记录下一层级的数量
           ret.push([]) // 层级初始化
-          // 遍历广度 同一层级 一次循环
+          // 遍历广度 同一层级的元素都取出来
           for (let i = 1; i <= currentLevelSize; ++i) {
-            const node = q.shift() // 广度节点
+            const node = q.shift() // 取出同一层级的元素
             ret[ret.length - 1].push(node.val) // 添加广度同一节点
             // 下个层级
             if (node.left) q.push(node.left) 
