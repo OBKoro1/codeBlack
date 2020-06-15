@@ -1,0 +1,115 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/54螺旋矩阵.html
+ * Description  : 54螺旋矩阵
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>54螺旋矩阵</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number[][]} matrix
+       * @return {number[]}
+       */
+      let oldArr = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ]
+      // let oldArr = [
+      //   [1, 2],
+      //   [4, 5],
+      //   [7, 8],
+      // ]
+      // 题解: https://leetcode-cn.com/problems/spiral-matrix/solution/shou-hui-tu-jie-liang-chong-bian-li-de-ce-lue-kan-/
+      // 环形遍历 设置四个边界 由外向内遍历
+      var spiralOrder = function (matrix) {
+        if (matrix.length === 0) return []
+        const res = []
+        let top = 0,
+          bottom = matrix.length - 1,
+          left = 0,
+          right = matrix[0].length - 1
+        while (top < bottom && left < right) {
+          for (let i = left; i < right; i++) res.push(matrix[top][i]) // 上层
+          for (let i = top; i < bottom; i++) res.push(matrix[i][right]) // 右层
+          for (let i = right; i > left; i--) res.push(matrix[bottom][i]) // 下层
+          for (let i = bottom; i > top; i--) res.push(matrix[i][left]) // 左层
+          right--
+          top++
+          bottom--
+          left++ // 四个边界同时收缩，进入内层
+        }
+        // 剩下一行，从左到右依次添加
+        if (top === bottom && left <= right)
+          for (let i = left; i <= right; i++) res.push(matrix[top][i])
+        // 剩下一列，从上到下依次添加
+        else if (left === right && top <= bottom)
+          for (let i = top; i <= bottom; i++) res.push(matrix[i][left])
+        return res
+      }
+
+      // 环形遍历到底 中途退出
+      var spiralOrder = function (matrix) {
+        if (matrix.length == 0) return []
+        const res = []
+        let top = 0,
+          bottom = matrix.length - 1,
+          left = 0,
+          right = matrix[0].length - 1
+        // 即使top === bottom 或者 left === right 可能还剩一行或者一列
+        while (top <= bottom && left <= right) {
+          for (let i = left; i <= right; i++) res.push(matrix[top][i])
+          top++ // i = top 如果是最后一项 那么下面一个for循环不会运行
+          for (let i = top; i <= bottom; i++) res.push(matrix[i][right])
+          right--
+          // 跟上个方法的区别
+          // 当top > bottom 或者 left > right 其中有条边界将交错
+          // 即所有项都添加完成
+          if (top > bottom || left > right) break
+          for (let i = right; i >= left; i--) res.push(matrix[bottom][i])
+          bottom--
+          for (let i = bottom; i >= top; i--) res.push(matrix[i][left])
+          left++
+        }
+        return res
+      }
+
+      // 环形遍历到底 其他的跟上面一样判断条件不一样
+      var spiralOrder = function (matrix) {
+        if (matrix.length == 0) return []
+        const res = []
+        let top = 0,
+          bottom = matrix.length - 1,
+          left = 0,
+          right = matrix[0].length - 1
+        const size = matrix.length * matrix[0].length
+        while (res.length !== size) {
+          // 仍未遍历结束
+          for (let i = left; i <= right; i++) res.push(matrix[top][i])
+          top++
+          for (let i = top; i <= bottom; i++) res.push(matrix[i][right])
+          right--
+          // 根据元素的数量来判断遍历结束
+          if (res.length === size) break
+          for (let i = right; i >= left; i--) res.push(matrix[bottom][i])
+          bottom--
+          for (let i = bottom; i >= top; i--) res.push(matrix[i][left])
+          left++
+        }
+        return res
+      }
+
+      console.log('输出', spiralOrder(oldArr))
+    </script>
+  </body>
+</html>
