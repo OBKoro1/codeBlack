@@ -1,0 +1,72 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 103二叉树的锯齿形层次遍历
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>103二叉树的锯齿形层次遍历</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * Definition for a binary tree node.
+       * function TreeNode(val) {
+       *     this.val = val;
+       *     this.left = this.right = null;
+       * }
+       */
+      /**
+       * @param {TreeNode} root
+       * @return {number[][]}
+       */
+      // TODO: 核心是左侧一直在前面 右侧一直在后面 取的时候按照遍历顺序从前或者从后取
+      var zigzagLevelOrder = function (root) {
+        if (root == null) return []
+        var arr = [root]
+        var res = []
+        var go = true
+        while (arr.length > 0) {
+          var n = arr.length
+          var now = []
+          if (go) {
+            while (n > 0) {
+              // 从左侧往右
+              var node = arr.shift()
+              now.push(node.val)
+              // 下一轮是 从右往左
+              // 从左往右循环一定要用push unshift右侧的值会在前面
+              if (node.left != null) arr.push(node.left) // 左侧在前面
+              if (node.right != null) arr.push(node.right) // 右侧在后面
+              n--
+            }
+            res.push(now) // 添加当前层级
+          } else {
+            while (n > 0) {
+              // 从右往左 先取后面的
+              var node = arr.pop()
+              now.push(node.val)
+              // 下一轮是从左往右
+              // TODO: 从右往左一定要用unshift 用push左边的树的子节点可能会在后面
+              if (node.right != null) arr.unshift(node.right) // 右侧在后面
+              if (node.left != null) arr.unshift(node.left) // 左侧在前面
+              n--
+            }
+            res.push(now)
+          }
+          go = !go // 更改方向
+        }
+        return res
+      }
+
+      console.log('输出', test())
+    </script>
+  </body>
+</html>
