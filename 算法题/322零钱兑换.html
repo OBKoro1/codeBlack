@@ -1,0 +1,56 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 322零钱兑换
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>322零钱兑换</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number[]} coins
+       * @param {number} amount
+       * @return {number}
+       */
+      const coins = [3, 7],
+        amount = 11 // 10
+      /**
+       * @param {number[]} coins
+       * @param {number} amount
+       * @return {number}
+       */
+      //  自底而上动态规划 从头开始找最优解: https://leetcode-cn.com/problems/coin-change/solution/js-xiang-jie-dong-tai-gui-hua-de-si-xiang-yi-bu-da/
+      var coinChange = function (coins, amount) {
+        let dp = new Array(amount + 1).fill(Infinity) // 初始无限大 再比较的时候 会使用零钱次数
+        dp[0] = 0
+        // 所有零钱种类
+        for (let coin of coins) {
+          // 总金额
+          for (let i = 1; i <= amount; i++) {
+            if (i - coin >= 0) {
+              // 总金额大于零钱
+              // dp[i - coin] + 1 当前零钱需要的次数
+              // dp[i] 其他零钱种类的最少次数
+              // 如果前面的找不到最优解 会变为Infinity
+              dp[i] = Math.min(dp[i], dp[i - coin] + 1)
+            }
+          }
+        }
+        console.log('res',dp)
+        // 如果没找到 返回-1
+        return dp[amount] === Infinity ? -1 : dp[amount]
+      }
+
+      console.log('输出', coinChange(coins, amount))
+    </script>
+  </body>
+</html>
