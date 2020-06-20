@@ -1,0 +1,88 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 22括号生成
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>22括号生成</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number} n
+       * @return {string[]}
+       */
+      //  题解超强: https://leetcode-cn.com/problems/generate-parentheses/solution/hui-su-suan-fa-by-liweiwei1419/
+      //  树思想 回溯 深度优先遍历
+      var generateParenthesis2 = function (n) {
+        let left = (right = n) // 左右分支的数量
+        let res = []
+        if (n == 0) {
+          return res
+        }
+        dfs('', left, right)
+        function dfs(preStr, left, right) {
+          // 当没有括号时 即回溯终止
+          if (left === 0 && right === 0) {
+            res.push(preStr)
+            return
+          }
+          // 当成一颗深度为2n的树来做 每个括号在这棵树内都会都用到
+          // 剪枝: 左括号可以使用的个数严格大于右括号可以使用的个数时 左侧也会生出分支准备生出右侧的括号
+          if (left > right) {
+            return
+          }
+          // 一次添加左侧一次添加右侧 回溯 凑成括号
+          if (left > 0) {
+            dfs(`${preStr}(`, left - 1, right)
+          }
+          if (right > 0) {
+            dfs(`${preStr})`, left, right - 1)
+          }
+        }
+        return res
+      }
+
+      // 回溯加法方式 深度优先遍历
+      var generateParenthesis3 = function (n) {
+        let res = []
+        dfs('', 0, 0)
+        function dfs(preStr, left, right) {
+          // 括号数量用完了 取消回溯
+          if (left === n && right === n) {
+            res.push(preStr)
+            return
+          }
+          // 当左边的数量小于右边时 左侧也会生出分支准备生出右侧的括号
+          if (left < right) {
+            return
+          }
+          // 一次添加左侧一次添加右侧 回溯 凑成括号
+          if (left < n) {
+            dfs(`${preStr}(`, left + 1, right)
+          }
+          if (right < n) {
+            dfs(`${preStr})`, left, right + 1)
+          }
+        }
+        return res
+      }
+      //   输出：[
+      //    "((()))",
+      //    "(()())",
+      //    "(())()",
+      //    "()(())",
+      //    "()()()"
+      //  ]
+      console.log('输出', generateParenthesis(3))
+    </script>
+  </body>
+</html>
