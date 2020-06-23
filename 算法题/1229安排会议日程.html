@@ -1,0 +1,68 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/1229安排会议日程.html
+ * Description  : 1229安排会议日程
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1229安排会议日程</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number[][]} slots1
+       * @param {number[][]} slots2
+       * @param {number} duration
+       * @return {number[]}
+       */
+      // 滑窗 划出范围
+      var minAvailableDuration = function (slots1, slots2, duration) {
+        let start = 0,
+          end = 0,
+          find = false
+        // 排序找到最早的时间
+        const fn = (a, b) => {
+          return a[0] - b[0]
+        }
+        slots1.sort(fn)
+        slots2.sort(fn)
+        for (let i = 0; i < slots1.length; i++) {
+          const item1 = slots1[i]
+          for (let j = 0; j < slots2.length; j++) {
+            const item2 = slots2[j]
+            if (item1[1] < item2[0]) {
+              continue
+            }
+            if (item2[1] < item1[0]) {
+              continue
+            }
+            // 滑窗思想 先固定一边 再固定另一边
+            start = Math.max(item1[0], item2[0]) // 找到最小值中最大的
+            end = Math.min(item1[1], item2[1]) // 找到最大值最小的
+            // 测试区间范围
+            if (end - start >= duration) {
+              find = true
+              break
+            }
+          }
+          if (find) {
+            break
+          }
+        }
+        if (find) {
+          end = start + duration // 最早会议时间
+          return [start, end]
+        }
+        return []
+      }
+      console.log('输出', minAvailableDuration())
+    </script>
+  </body>
+</html>
