@@ -1,0 +1,89 @@
+<!--
+ * Author       : OBKoro1
+ * Date         : 2020-04-15 17:21:59
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-04-15 17:24:26
+ * FilePath     : /codeBlack/template.html
+ * Description  : 386字典序排数
+ * https://github.com/OBKoro1
+ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>386字典序排数</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * @param {number} n
+       * @return {number[]}
+       */
+      var lexicalOrder = function (n) {
+        // 回溯
+        const dfs = (cur, n, arr) => {
+          if (cur > n) {
+            debugger
+            // 当前值大于数量
+            // 13 > 9
+            return
+          } else {
+            arr.push(cur) // 添加当前循环值 每次进来都是合理值 不合理的都被Return了
+            for (let i = 0; i < 10; i++) {
+              // 下个循环值是否大于数量
+              if (cur * 10 + i > n) {
+                return
+              } else {
+                dfs(cur * 10 + i, n, arr)
+              }
+            }
+          }
+        }
+        let result = []
+        // 循环9个初始值
+        for (let i = 1; i < 10; i++) {
+          dfs(i, n, result)
+        }
+        return result
+      }
+
+      /** 树
+       * @param {number} n
+       * @return {number[]}
+       */
+      //  以前缀为排序
+      var lexicalOrder3 = function (n) {
+        const stack = [9, 8, 7, 6, 5, 4, 3, 2, 1] // 顺序
+        const res = []
+        let i = stack.length,
+          temp,
+          front
+        while (i) {
+          while (i--) {
+            front = stack.pop() // 取出前缀
+            if (front === undefined || front > n) continue // 前缀小于数量 进入下一个层级 个位进十位  十位 进百位
+            res.push(front) // 添加前缀
+            for (let j = 9; j >= 0; j--) stack.push(+('' + front + j)) // 该前缀的所有字段添加到末尾 下次就会被添加进字典序中
+          }
+          i = stack.length // 取值
+        }
+        return res
+      }
+      /**
+       * @param {number} n
+       * @return {number[]}
+       */
+      //  字符串的排序就是字典序
+      var lexicalOrder2 = function (n) {
+        let result = []
+        for (let i = 1; i <= n; i++) {
+          result.push(i + '')
+        }
+        result = result.sort()
+        return result
+      }
+      console.log('输出', lexicalOrder(9))
+    </script>
+  </body>
+</html>
