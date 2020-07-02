@@ -1,9 +1,9 @@
 <!--
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
- * LastEditors: OBKoro1
- * LastEditTime: 2020-06-09 23:46:11
- * FilePath: /codeBlack/interviewQuestion/11题盛最多水的容器.html
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-06-30 14:45:26
+ * FilePath     : \codeBlack\interviewQuestion\11题盛最多水的容器.html
  * Description  : 11题盛最多水的容器
  * https://github.com/OBKoro1
  -->
@@ -27,7 +27,7 @@
       while (left < right) {
         let now = (right - left) * Math.min(height[right], height[left]); // 当前水量
         max = now > max ? now : max; // 更新最大水量
-        // TODO: 窗口缩小思路
+        // 窗口缩小思路
         // 从数组左右两侧开始，判定两者的大小，以较小的一侧为滑动边界；
         // 如果滑动边界向内收缩一位的值比之前的值要小，那么继续滑动，这时候的面积肯定是逐渐减小的；
         // 当出现滑动边界的值比之前的大了，那么就需要重新判断下左右边界的大小，进行一次新的操作；
@@ -41,7 +41,7 @@
       return max;
     };
 
-    // 暴力法 => 我的解法
+    // 暴力法
     function maxArea(height) {
       const total = height.length
       let max = 0

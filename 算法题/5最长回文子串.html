@@ -1,94 +1,70 @@
 <!--
  * Author       : OBKoro1
  * Date         : 2020-04-15 17:21:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2020-06-12 23:38:47
- * FilePath: /codeBlack/算法题/5最长回文子串.html
+ * LastEditors  : OBKoro1
+ * LastEditTime : 2020-06-30 13:39:51
+ * FilePath     : \codeBlack\算法题\5最长回文子串.html
  * Description  : 5. 最长回文子串1
  * https://github.com/OBKoro1
  -->
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5最长回文子串</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>5最长回文子串</title>
-</head>
-
-<body>
-  <script>
-    let str = 'babad'
-    let str2 =
-      'civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth'
-
-    /*
-* @lc app=leetcode id=5 lang=javascript
-*
-* [5] Longest Palindromic Substring
-*/
-    /**
-     * @param {string} s
-     * @return {string}
-     */
-    var longestPalindrome = function (s) {
-      if (!s || s.length === 0) return "";
-      let res = s[0];
-
-      const dp = [];
-
-      // 倒着遍历简化操作， 这么做的原因是dp[i][..]依赖于dp[i + 1][..]
-      for (let i = s.length - 1; i >= 0; i--) {
-        dp[i] = [];
-        for (let j = i; j < s.length; j++) {
-          // specail case就是一个字符（轴对称点是本身），或者两个字符（轴对称点是介于两者之间的虚拟点）
-          if (j - i === 0) dp[i][j] = true;
-          // specail case 1
-          else if (j - i === 1 && s[i] === s[j]) dp[i][j] = true;
-          // specail case 2
-          else if (s[i] === s[j] && dp[i + 1][j - 1]) { // 这两个字符相等 并且轴对称
-            // state transition
-            dp[i][j] = true; // 当前循环为回文 状态切成轴对称
-          }
-
-          if (dp[i][j] && j - i + 1 > res.length) {
-            // update res
-            res = s.slice(i, j + 1);
+  <body>
+    <script>
+      let str = "babad";
+      let str2 =
+        "civilwartestingwhetherthatnaptionoranynartionsoconceivedandsodedicatedcanlongendureWeareqmetonagreatbattlefiemldoftzhatwarWehavecometodedicpateaportionofthatfieldasafinalrestingplaceforthosewhoheregavetheirlivesthatthatnationmightliveItisaltogetherfangandproperthatweshoulddothisButinalargersensewecannotdedicatewecannotconsecratewecannothallowthisgroundThebravelmenlivinganddeadwhostruggledherehaveconsecrateditfaraboveourpoorponwertoaddordetractTgheworldadswfilllittlenotlenorlongrememberwhatwesayherebutitcanneverforgetwhattheydidhereItisforusthelivingrathertobededicatedheretotheulnfinishedworkwhichtheywhofoughtherehavethusfarsonoblyadvancedItisratherforustobeherededicatedtothegreattdafskremainingbeforeusthatfromthesehonoreddeadwetakeincreaseddevotiontothatcauseforwhichtheygavethelastpfullmeasureofdevotionthatweherehighlyresolvethatthesedeadshallnothavediedinvainthatthisnationunsderGodshallhaveanewbirthoffreedomandthatgovernmentofthepeoplebythepeopleforthepeopleshallnotperishfromtheearth";
+      // 双指针中心扩展法
+      /**
+       * @param {string} s
+       * @return {string}
+       */
+      var longestPalindrome = function (s) {
+        let result = s[0] || "";
+        for (let i = 0; i < s.length; i++) {
+          for (let j = 1; j <= 2; j++) {
+            //偶数奇数回文串
+            let left = i,
+              right = i + j;
+            while (left >= 0 && right < s.length && s[left] === s[right]) {
+              left--, right++; //向外扩展直到两端不相同
+            }
+            let length = right - left - 1; //(right - 1) - (left + 1) + 1
+            if (length > result.length) {
+              result = s.substr(left + 1, length);
+            }
           }
         }
-      }
-
-      return res;
-    };
-
-    /**
-     * @param {string} s
-     * @return {string}
-     */
-    var longestPalindrome2 = function (s) {
-      let maxStr = ''
-      let len = s.length
-      // 双循环 每个字符都比较一次
-      for (let i = 0; i < len; i++) {
-        for (let j = len; j > i; j--) {
-          if (j - i <= maxStr.length) {
-            continue
-          }
-          let newStr = s.slice(i, j) // 当前循环
-          let strArr = newStr.split('') // 切割成数组
-          let reverseStr = strArr.reverse().join('') // 颠倒字符串
-          // 相等并且超过的话
-          if (newStr === reverseStr && newStr.length > maxStr.length) {
-            maxStr = newStr
+        return result;
+      };
+      
+      /**
+       * @param {string} s
+       * @return {string}
+       */
+      var longestPalindrome = function (s) {
+        let n = s.length;
+        let res = "";
+        let dp = Array.from(new Array(n), () => new Array(n).fill(0));
+        for (let i = n - 1; i >= 0; i--) {
+          for (let j = i; j < n; j++) {
+            dp[i][j] = s[i] == s[j] && (j - i < 2 || dp[i + 1][j - 1]);
+            if (dp[i][j] && j - i + 1 > res.length) {
+              res = s.substring(i, j + 1);
+            }
           }
         }
-      }
-      return maxStr
-    }
+        return res;
+      };
 
-    console.log('输出', longestPalindrome(str))
-    console.log('输出', longestPalindrome(str2))
-  </script>
-</body>
-
+      console.log("输出", longestPalindrome(str));
+      console.log("输出", longestPalindrome(str2));
+    </script>
+  </body>
 </html>
