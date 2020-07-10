@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>template</title>
+  </head>
+  <body>
+    <script>
+      // 模拟请求
+      const arr = getAjax(30);
+      function getAjax(ajaxNum) {
+        function get(i) {
+          // 闭包存储请求
+          return function () {
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                resolve(`第${i}个请求结果`);
+              }, 1500 + i * 100);
+            });
+          };
+        }
+        const res = []; // 请求
+        for (let i = 1; i <= ajaxNum; i++) {
+          const ajax = get(i);
+          res.push(ajax);
+        }
+        return res;
+      }
+
+      /**
+       * description:
+       * param {Array} tasks 所有请求
+       * param {Number} queueCapacity 最大请求数量
+       * param {Number} num 当前请求数量
+       * return:
+       */
+      let num = 0;
+      const resArr = [];
+      const asyncQueueExecutor2 = (tasks, queueCapacity = 6) => {
+        while (num < queueCapacity && tasks.length) {
+          num++;
+          const ajax = tasks.shift(); // 取出请求
+          // 执行请求
+          const res = ajax();
+          res
+            .then((res) => {
+              resArr.push(res);
+              num--;
+              if (tasks.length === 0) {
+                console.log("num", num);
+                if (tasks.length === 0 && num === 0) {
+                  console.log("结束", resArr);
+                }
+              } else {
+                // 一个请求结束 执行下个请求
+                asyncQueueExecutor2(tasks, queueCapacity, num);
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+      };
+
+      class asyncQueueExecutor {
+        /**
+         * description: 简单的请求限流
+         * param {Array} tasks 所有请求
+         * param {Number} queueCapacity 最大请求数量
+         * param {Number} succeedCallBack 请求结束回调
+         * return:
+         */
+        constructor(tasks, succeedCallBack, queueCapacity = 6) {
+          this.tasks = tasks;
+          this.queueCapacity = queueCapacity;
+          this.count = 0;
+          this.resArr = []; // 请求结果
+          this.succeedCallBack = succeedCallBack;
+          this.init();
+        }
+        init() {
+          while (this.count < this.queueCapacity && this.tasks.length) {
+            this.count++; // 增加请求数
+            const ajax = this.tasks.shift(); // 取出请求
+            ajax().then((res) => {
+              this.resArr.push(res); // 缓存请求结果
+              this.count--;
+              // 取出所有请求的结果
+              if (this.tasks.length === 0 && this.count === 0) {
+                this.succeedCallBack(this.resArr);
+              } else {
+                // 执行下个请求
+                this.init();
+              }
+            });
+          }
+        }
+      }
+      // asyncQueueExecutor2(arr);
+      const asyncAjax = new asyncQueueExecutor(arr, (res) => {
+        console.log("所有请求结果", res);
+      });
+    </script>
+  </body>
+</html>
