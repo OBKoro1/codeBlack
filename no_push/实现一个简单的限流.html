@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>template</title>
+    <title>实现一个简单的限流</title>
   </head>
   <body>
     <script>
@@ -32,34 +32,40 @@
        * description:
        * param {Array} tasks 所有请求
        * param {Number} queueCapacity 最大请求数量
-       * param {Number} num 当前请求数量
+       * param {Number} succeedCallBack 请求结果回调
        * return:
        */
-      let num = 0;
-      const resArr = [];
-      const asyncQueueExecutor2 = (tasks, queueCapacity = 6) => {
-        while (num < queueCapacity && tasks.length) {
-          num++;
-          const ajax = tasks.shift(); // 取出请求
-          // 执行请求
-          const res = ajax();
-          res
-            .then((res) => {
-              resArr.push(res);
-              num--;
-              if (tasks.length === 0) {
-                console.log("num", num);
-                if (tasks.length === 0 && num === 0) {
-                  console.log("结束", resArr);
+
+      const asyncQueueExecutor2 = (
+        tasks,
+        queueCapacity = 6,
+        succeedCallBack
+      ) => {
+        let num = 0;
+        const resArr = [];
+        function nextAjax() {
+          // 请求上限和剩余请求数
+          while (num < queueCapacity && tasks.length) {
+            num++;
+            const ajax = tasks.shift(); // 取出请求
+            // 执行请求
+            ajax()
+              .then((res) => {
+                resArr.push(res);
+                num--;
+                if (tasks.length === 0) {
+                  if (num === 0) {
+                    succeedCallBack(resArr);
+                  }
+                } else {
+                  // 一个请求结束 执行下个请求
+                  nextAjax(tasks, queueCapacity, num);
                 }
-              } else {
-                // 一个请求结束 执行下个请求
-                asyncQueueExecutor2(tasks, queueCapacity, num);
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-            });
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
         }
       };
 
@@ -87,9 +93,10 @@
               this.resArr.push(res); // 缓存请求结果
               this.count--;
               // 取出所有请求的结果
-              if (this.tasks.length === 0 && this.count === 0) {
-                console.log("res", this.resArr);
-                this.succeedCallBack(this.resArr);
+              if (this.tasks.length === 0) {
+                if (this.count === 0) {
+                  this.succeedCallBack(this.resArr);
+                }
               } else {
                 // 执行下个请求
                 this.init();
@@ -98,7 +105,9 @@
           }
         }
       }
-      // asyncQueueExecutor2(arr);
+      asyncQueueExecutor2(arr, 6, (res) => {
+        console.log("所有请求结果", res);
+      });
       const asyncAjax = new asyncQueueExecutor(arr, (res) => {
         console.log("所有请求结果", res);
       });
