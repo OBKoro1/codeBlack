@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>多次请求保留最后一次请求结果</title>
+  </head>
+  <body>
+    <script>
+      // 业务需求中，经常有 只需要最后一次请求的结果（比如搜索）编写一个高阶函数，传递旧请求方法（执行后返回 promise），返回一个新方法。
+      // 连续触发时，若上一次 promise 执行未结束则直接废弃，只有最后一次 promise 会触发then/reject。
+      /**
+       * 只有最后一次promise会then与reject
+       * @param {function} promiseFunction
+       * promiseFunction 示例： () => fetch('data')
+       */
+      function lastPromise(promiseFunction) {
+        let pArr = []; // 保留执行结果
+        return () => {
+          // 返回promise
+          return new Promise((rs) => {
+            promiseFunction().then((res) => {
+              pArr.push(res); // 添加结果
+              let num1 = pArr.length; // 保留上次结果
+              setTimeout(() => {
+                // 如果上次结果不再增加说明在这一秒内为最后一次调用 输出最后一次结果
+                if (num1 === pArr.length) {
+                  rs(pArr[pArr.length - 1]);
+                }
+              }, 1000);
+            });
+          });
+        };
+      }
+
+      // 示例
+      let count = 1;
+      let promiseFunction = () =>
+        new Promise((rs) =>
+          window.setTimeout(() => {
+            rs(count++);
+          })
+        );
+
+      let lastFn = lastPromise(promiseFunction);
+      lastFn().then(console.log); // 无输出
+      lastFn().then(console.log); // 无输出
+      lastFn().then(console.log); // 3
+    </script>
+  </body>
+</html>
