@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>template</title>
+  </head>
+  <body>
+    <script>
+      // 入参格式参考：
+      const originObj = {
+        a: {
+          b: {
+            c: [1, 5, 11, 23, 422],
+          },
+        },
+        d: function () {
+          console.log("hello world");
+        },
+      };
+
+      /*实现一个函数，可以深拷贝一个对象，对象可能包含 function*/
+      function clone(originObj) {
+        let res = {};
+        if (Array.isArray(originObj)) {
+          res = [];
+        }
+        for (let key in originObj) {
+          const typeStr = Object.prototype.toString(originObj[key]);
+          if (typeStr === "object object" || Array.isArray(originObj[key])) {
+            res = clone(originObj[key]);
+          } else {
+            res[key] = originObj[key];
+          }
+        }
+        return res;
+      }
+      const b = clone(originObj)
+      console.log("输出", originObj, b);
+    </script>
+  </body>
+</html>
