@@ -15,8 +15,9 @@
           let isChange = true
           //  每个元素都冒泡一次
           for (let j = 0; j < len - 1 - i; j++) {
-            // 找出当前循环最大一位元素
+            // 比较相邻元素
             if (arr[j] > arr[j + 1]) {
+              // 大的元素冒泡 找出当前循环最大一位元素
               ;[arr[j], arr[j + 1]] = [arr[j + 1], arr[j]]
               isChange = false
             }
