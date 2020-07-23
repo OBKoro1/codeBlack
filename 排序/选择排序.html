@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>选择排序</title>
+  </head>
+  <body>
+    <script>
+      const oldArr = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+      function selectionSort(arr) {
+        for (let i = 0; i < arr.length - 1; i++) {
+          let minIndex = i
+          for (let j = i; j < arr.length; j++) {
+            if (arr[j] < arr[minIndex]) {
+              minIndex = j
+            }
+          }
+          [arr[minIndex], arr[i]] = [arr[i], arr[minIndex]]
+        }
+        return arr
+      }
+      console.log('输出', selectionSort(oldArr))
+    </script>
+  </body>
+</html>
