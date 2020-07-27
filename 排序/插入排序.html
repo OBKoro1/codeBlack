@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>插入排序</title>
+  </head>
+  <body>
+    <script>
+      const oldArr = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+      // 每次插入一个元素 跟前面的元素做对比
+      function insertSort(arr) {
+        for (let i = 1; i < oldArr.length; i++) {
+          let target = i // 当前元素
+          for (let j = i - 1; j >= 0; j--) {
+            // arr[j] 每次要插入的元素
+            if (arr[target] < arr[j]) {
+              // 小的数字往前面插入
+              [arr[j], arr[target]] = [arr[target], arr[j]]
+              target = j
+            } else {
+              // 如果顺序已经是正常的 即前面都是排序好的
+              break
+            }
+          }
+        }
+        return arr
+      }
+      console.log('输出', insertSort(oldArr))
+    </script>
+  </body>
+</html>
