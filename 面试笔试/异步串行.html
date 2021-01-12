@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // https://juejin.im/post/6860646761392930830#comment
+      // TODO:
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+      const subFlow = createFlow([() => delay(1000).then(() => log('c'))]) // 通过run执行
+      const log = console.log
+      createFlow([
+        () => log('a'), // await执行
+        () => log('b'), // await执行
+        subFlow, // 返回 { run } await执行
+        [() => delay(1000).then(() => log('d')), () => log('e')], // 展开里面的方法 await执行
+      ]).run(() => {
+        console.log('done')
+      })
+      // 实现createFlow方法 需要按照 a,b,延迟1秒,c,延迟1秒,d,e, done 的顺序打印
+
+      // function createFlow(effects = []) {
+      //   const queue = [...effects.flat()] // 展开入参 存储入参
+      //   async function run(cb) {
+      //     for (let i = 0; i < queue.length; i++) {
+      //       // 碰到run执行run 全都使用await执行 有异步就等待 没有异步就直接执行
+      //       if (queue[i].run) {
+      //         await queue[i].run()
+      //       } else {
+      //         await queue[i]()
+      //       }
+      //     }
+      //     // run执行完之后的回调 done
+      //     cb?.()
+      //   }
+      //   return {
+      //     run, // 通过run方法执行入参
+      //     isFlow: true,
+      //   }
+      // }
+
+      function createFlow(effectArr) {
+        let flow = [...effectArr.flat()] // 展开入参 存储入参
+        flow.run = async function (cb) {
+          for (const item of flow) {
+            const res = item() // 执行每个函数函数
+            // promise 即await
+            if (res?.then) {
+              await res
+            }
+          }
+          cb?.()
+        }
+        return flow
+      }
+    </script>
+  </body>
+</html>

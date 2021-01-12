@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>快排</title>
+  </head>
+  <body>
+    <script>
+      const oldArr = [6, 1, 2, 7, 9, 3, 4, 5, 10, 8]
+      function quickSort(array) {
+        function help(array, start, end) {
+          // 数组长度
+          if (end - start < 1) {
+            return
+          }
+          const target = array[start]
+          let l = start
+          let r = end
+         //  循环整个数组
+          while (l < r) {
+            //  循环右侧 找出右侧比target小的元素 停止循环
+            while (l < r && array[r] >= target) {
+              r--
+            }
+            array[l] = array[r] // 小的元素放到开头
+            // 循环左侧 找出左侧比target大的元素 停止循环
+            while (l < r && array[l] < target) {
+              l++
+            }
+            array[r] = array[l] // 大的元素放在后面
+          }
+          array[l] = target // 排列结束 把target放在中间
+          help(array, start, l - 1) //
+          help(array, l + 1, end) // 
+          return array
+        }
+        return help(array, 0, array.length - 1)
+      }
+      console.log('quickSort', quickSort(oldArr))
+    </script>
+  </body>
+</html>
